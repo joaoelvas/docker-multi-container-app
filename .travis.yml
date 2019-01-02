@@ -14,7 +14,7 @@ after_success:
   - docker build -t joaoelvas/multi-server ./server
   - docker build -t joaoelvas/multi-worker ./worker
   # Docker login 
-  - echo "DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Push images to dockerhub
   - docker push joaoelvas/multi-client
   - docker push joaoelvas/multi-nginx
