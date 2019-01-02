@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t joaoelvas/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run joaoelvas/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t joaoelvas/multi-client ./client
+  - docker build -t joaoelvas/multi-nginx ./nginx
+  - docker build -t joaoelvas/multi-server ./server
+  - docker build -t joaoelvas/multi-worker ./worker
+  # Docker login 
+  - echo "DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  # Push images to dockerhub
+  - docker push joaoelvas/multi-client
+  - docker push joaoelvas/multi-nginx
+  - docker push joaoelvas/multi-server
+  - docker push joaoelvas/multi-worker
+  
